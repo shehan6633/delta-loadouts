@@ -89,7 +89,7 @@
         }
 
         .loadout-item:last-child { border-bottom: none; }
-        .loadout-name { color: #cbd5e1; font-size: 1.1rem; font-weight: 500; }
+        .loadout-name { color: #cbd5e1; font-size: 1.1rem; font-weight: bold; }
 
         .copy-btn {
             background-color: var(--accent-color);
@@ -137,18 +137,86 @@
         <div class="sub-title">ඔයාට කැමති Weapon Loadout එකක් මෙතනින් ලේසියෙන් Copy කරගන්න</div>
     </header>
 
-    <div class="container">
+    <div class="container" id="weapons-container">
 
+        <!-- 🔴 මෙන්න මෙතන තමයි ඔයාගේ වෙපන්ස් ලිස්ට් එක තියෙන්නේ 👇 -->
         <script>
-            // වෙපන්ස් 50 ලේසියෙන් Generate කරගන්න Array එකක් පාවිච්චි කරමු
-            const weaponsCount = 50;
-            const container = document.currentScript.parentElement;
+            const loadoutData = [
+                {
+                    title: "AUG LOADOUT",
+                    builds: [
+                        { name: "300K", code: "AUG Assault Rifle-Operations-6KBE984099PEUU4LF7EHP" },
+                        { name: "375K", code: "AUG Assault Rifle-Operations-6KBE9HC099PEUU4LF7EHP" },
+                        { name: "420K", code: "AUG Assault Rifle-Operations-6KBE9PK099PEUU4LF7EHP" },
+                        { name: "275K", code: "AUG Assault Rifle-Operations-6KBEA1K099PEUU4LF7EHP" }
+                    ]
+                },
+                {
+                    title: "M4A1 LOADOUT",
+                    builds: [
+                        { name: "350K", code: "M4A1-Assault Rifle-Operations-EXAMPLECODE111" },
+                        { name: "400K", code: "M4A1-Assault Rifle-Operations-EXAMPLECODE222" }
+                    ]
+                }
+                // 📝 ඉදිරියට තව වෙපන්ස් එකතු කරද්දී මෙතනින් පල්ලෙහාට කමා එකක් (,) දාලා ලියන්න.
+            ];
 
-            // දැනට Sample එකක් විදියට තුවක්කු නම් කිහිපයක් දාන්නම්, පස්සේ ඔයාට ඕන විදියට වෙනස් කරගන්න
-            const weaponNames = {
-                1: "AK-12", 2: "M4A1", 3: "AS VAL", 4: "SCAR-H", 5: "M16A4",
-                6: "AWM", 7: "M24", 8: "MP5", 9: "P90", 10: "UZI"
-            };
+            // වෙබ්සයිට් එකට වෙපන්ස් ටික ඉබේම ඇතුළත් කරන කොටස
+            const container = document.getElementById('weapons-container');
+            loadoutData.forEach((weapon, index) => {
+                let buildsHtml = '';
+                weapon.builds.forEach(build => {
+                    buildsHtml += `
+                        <div class="loadout-item">
+                            <span class="loadout-name">${build.name}</span>
+                            <button class="copy-btn" onclick="copyCode('${build.code}', this)">Copy Code</button>
+                        </div>`;
+                });
 
-            for(let i = 1; i <= weaponsCount; i++) {
-                //
+                let weaponHtml = `
+                    <div class="weapon-group">
+                        <div class="weapon-header" onclick="toggleWeapon(this)">
+                            <div class="weapon-title">${weapon.title}</div>
+                            <div class="arrow">▼</div>
+                        </div>
+                        <div class="loadout-list">
+                            ${buildsHtml}
+                        </div>
+                    </div>`;
+                container.insertAdjacentHTML('beforeend', weaponHtml);
+            });
+        </script>
+        <!-- 🔴 වෙපන්ස් ලිස්ට් එක ඉවරයි 👆 -->
+
+        <!-- Social Links Section -->
+        <div class="social-links">
+            <a href="https://youtube.com/@dsm_cyberzone?si=iO3iadmzRlE9z6T2" target="_blank" class="btn-social btn-youtube">Subscribe on YouTube</a>
+            <a href="https://discord.gg/24nARTqpwP" target="_blank" class="btn-social btn-discord">Join Our Discord Server</a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Developed for Delta Force Community.</p>
+    </footer>
+
+    <script>
+        function toggleWeapon(header) {
+            header.classList.toggle('active');
+            const list = header.nextElementSibling;
+            list.style.display = list.style.display === "block" ? "none" : "block";
+        }
+
+        function copyCode(code, button) {
+            navigator.clipboard.writeText(code).then(() => {
+                button.innerText = "Copied!";
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.innerText = "Copy Code";
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
