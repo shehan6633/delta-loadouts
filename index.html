@@ -195,6 +195,23 @@ nav{
   letter-spacing:0.18em;color:var(--gold);padding:4px 10px;border:1px solid rgba(255,215,0,0.3);text-transform:uppercase;
 }
 
+/* ── PRICE NOTICE SECTION STYLING (MODIFIED) ── */
+.price-notice-sec {
+    text-align: center; /* මැදට පෙළගැස්වීම */
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--orange); /* කැපී පෙනෙන තැඹිලි වර්ණය */
+    letter-spacing: 0.08em;
+    margin: 20px auto 25px auto;
+    padding: 10px 24px;
+    background: rgba(255, 107, 53, 0.06); /* ලා තැඹිලි පසුබිම */
+    border: 1px dashed rgba(255, 107, 53, 0.3); /* තිත් ඉරි සහිත Border එක */
+    display: table; /* බොක්ස් එක මැද තබා ගැනීමට */
+    border-radius: 4px;
+    text-shadow: 0 0 8px rgba(255, 107, 53, 0.4); /* දිලිසෙන Glow Effect එක */
+}
+
 /* ── MODE SELECTION TABS ── */
 .mode-menu {
     display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; padding: 0 10px;
@@ -392,6 +409,7 @@ footer{
     <div class="sec-badge" id="weapon-count-badge">0 WEAPONS</div>
   </div>
 
+  <!-- මෙන්න මේ කොටස මැදට ගෙනැවිත්, වර්ණ වෙනස් කර ඇත -->
   <div class="price-notice-sec">// NOTE: APPROXIMATE VALUE ONLY • PRICE DEPENDS ON AUCTION RATE</div>
 
   <!-- MODE SELECTION TABS -->
@@ -460,7 +478,6 @@ footer{
     
     <!-- LIVE CARDS GRID -->
     <div>
-      <!-- අලුතින් එකතු කරපු Community Live Search Engine එක -->
       <div style="margin-bottom: 20px;">
         <input type="text" id="comSearch" class="search-input" placeholder="🔍 Search Community Weapon or Player..." onkeyup="searchCommunity()">
       </div>
@@ -552,7 +569,7 @@ if (form) {
                 weaponName: weapon,
                 gameMode: mode,
                 loadoutCode: code,
-                likesCount: 0, // මුලින්ම ලයික් ගණන 0 ලෙස සේව් වේ
+                likesCount: 0,
                 timestamp: new Date()
             });
             alert("නියමයි! ඔයාගේ Loadout එක සාර්ථකව Live සයිට් එකට එකතු වුණා. 🎯🔥");
@@ -568,10 +585,9 @@ if (form) {
 }
 
 const cGrid = document.getElementById('communityGrid');
-let allCommunityData = []; // සර්ච් ෆිල්ටර් කරන්න දත්ත රඳවාගන්නා Array එක
+let allCommunityData = [];
 
 if (cGrid) {
-    // වැඩිපුරම Likes ලැබුණු ඒවා (Recommended) ඉහළින්ම පෙන්වීමට Query එක සකසා ඇත
     const q = query(collection(db, "community_loadouts"), orderBy("likesCount", "desc"), orderBy("timestamp", "desc"));
     
     onSnapshot(q, (snapshot) => {
@@ -583,7 +599,6 @@ if (cGrid) {
     });
 }
 
-// කාඩ්ස් HTML එකට සජීවීව ඇතුල් කරන ප්‍රධාන ශ්‍රිතය
 window.renderCommunityCards = function(dataArray) {
     cGrid.innerHTML = '';
     if (dataArray.length === 0) {
@@ -596,7 +611,6 @@ window.renderCommunityCards = function(dataArray) {
         const card = document.createElement('div');
         card.className = 'c-card';
         
-        // Likes 5කට වඩා තිබේ නම් රන් පාට Border එකක් (Gold Highlight) වැටේ
         if (likes >= 5) {
             card.style.borderColor = 'var(--gold)';
         }
@@ -611,7 +625,6 @@ window.renderCommunityCards = function(dataArray) {
                 <span style="font-family:'Share Tech Mono', monospace; color:var(--cyan); font-size:0.8rem; word-break:break-all;">${data.loadoutCode}</span>
                 <button class="cpybtn" style="padding:4px 8px; font-size:0.7rem; min-width:55px;" onclick="navigator.clipboard.writeText('${data.loadoutCode}'); alert('Community Code Copied!')">COPY</button>
             </div>
-            <!-- 👍 LIKE / RECOMMENDATION CONTROLLER -->
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-family:'Share Tech Mono', monospace; font-size:0.75rem; color:var(--txt2)">👍 ${likes} Recommendations</span>
                 <button class="cpybtn" style="background:rgba(255,255,255,0.05); color:var(--txt); min-width:auto; padding:3px 8px;" onclick="likeLoadout('${data.id}', ${likes})">👍 Like</button>
@@ -621,7 +634,6 @@ window.renderCommunityCards = function(dataArray) {
     });
 }
 
-// Like එකක් දැමූ විට Firestore Update කරන ශ්‍රිතය
 window.likeLoadout = async function(docId, currentLikes) {
     try {
         const docRef = doc(db, "community_loadouts", docId);
@@ -633,7 +645,6 @@ window.likeLoadout = async function(docId, currentLikes) {
     }
 }
 
-// Community සජීවී සෙවුම් පද්ධතිය (Live Search)
 window.searchCommunity = function() {
     const filter = document.getElementById('comSearch').value.toLowerCase();
     const filteredData = allCommunityData.filter(item => {
