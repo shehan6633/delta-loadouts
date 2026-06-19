@@ -441,7 +441,6 @@ footer{
         </div>
         <div class="com-group">
           <label class="com-label">Loadout Code (පූර්ණ Game Code එකම පේස්ට් කරන්න)</label>
-          <!-- AUTO EXTRACT කරන්න ලේසි වෙන්න මෙතනට input event එකක් දැම්මා මචං -->
           <input type="text" id="lCode" class="com-input" placeholder="e.g., K416 Assault Rifle-Warfare-6I5UQBK..." oninput="autoExtractCode(this)" required>
         </div>
         <div class="com-group">
@@ -461,7 +460,12 @@ footer{
     
     <!-- LIVE CARDS GRID -->
     <div>
-      <div style="font-family:'Share Tech Mono', monospace; font-size:0.75rem; color:var(--txt2); margin-bottom:12px; letter-spacing:1px;">[ RECENT TRANSMISSIONS ]</div>
+      <!-- අලුතින් එකතු කරපු Community Live Search Engine එක -->
+      <div style="margin-bottom: 20px;">
+        <input type="text" id="comSearch" class="search-input" placeholder="🔍 Search Community Weapon or Player..." onkeyup="searchCommunity()">
+      </div>
+      
+      <div style="font-family:'Share Tech Mono', monospace; font-size:0.75rem; color:var(--txt2); margin-bottom:12px; letter-spacing:1px;">[ TOP RECOMMENDED & RECENT TRANSMISSIONS ]</div>
       <div class="c-grid" id="communityGrid">
          <!-- Firebase Live Cards Target -->
       </div>
@@ -488,7 +492,6 @@ footer{
 function autoExtractCode(inputElement) {
     let fullText = inputElement.value.trim();
     
-    // ගේම් එකෙන් කොපි කරන "K416 Assault Rifle-Warfare-6I5UQBK094LVQU5F76L11" වගේ ඒවා කඩන්න '-' සලකුණ පාවිච්චි කරනවා.
     if (fullText.includes('-')) {
         let parts = fullText.split('-');
         
@@ -497,10 +500,8 @@ function autoExtractCode(inputElement) {
             let extractedMode = parts[1].trim().toUpperCase();
             let extractedCode = parts[2].trim();
             
-            // Input Boxes වලට ඔටෝ Fill කරනවා
             document.getElementById('wName').value = extractedWeapon;
             
-            // Mode එක OPERATIONS ද WARFARE ද කියලා බලලා Select Box එක වෙනස් කරනවා
             let selectMode = document.getElementById('gMode');
             if (extractedMode.includes("WARFARE")) {
                 selectMode.value = "WARFARE";
@@ -508,7 +509,6 @@ function autoExtractCode(inputElement) {
                 selectMode.value = "OPERATIONS";
             }
             
-            // අන්තිමට, Loadout Code එක තියෙන Box එකට මුළු දිග වැලියු එක වෙනුවට අර අකුරු 21ක ශුද්ධ Code එක විතරක් ඉතුරු කරනවා!
             inputElement.value = extractedCode;
         }
     }
@@ -518,7 +518,7 @@ function autoExtractCode(inputElement) {
 <!-- FIREBASE DB CONNECTION -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC4tZLXEXy8Xsj6tNpxkJqMtRGuDTeLe5o",
@@ -552,6 +552,7 @@ if (form) {
                 weaponName: weapon,
                 gameMode: mode,
                 loadoutCode: code,
+                likesCount: 0, // මුලින්ම ලයික් ගණන 0 ලෙස සේව් වේ
                 timestamp: new Date()
             });
             alert("නියමයි! ඔයාගේ Loadout එක සාර්ථකව Live සයිට් එකට එකතු වුණා. 🎯🔥");
@@ -567,32 +568,79 @@ if (form) {
 }
 
 const cGrid = document.getElementById('communityGrid');
+let allCommunityData = []; // සර්ච් ෆිල්ටර් කරන්න දත්ත රඳවාගන්නා Array එක
+
 if (cGrid) {
-    const q = query(collection(db, "community_loadouts"), orderBy("timestamp", "desc"));
+    // වැඩිපුරම Likes ලැබුණු ඒවා (Recommended) ඉහළින්ම පෙන්වීමට Query එක සකසා ඇත
+    const q = query(collection(db, "community_loadouts"), orderBy("likesCount", "desc"), orderBy("timestamp", "desc"));
+    
     onSnapshot(q, (snapshot) => {
-        cGrid.innerHTML = '';
-        if (snapshot.empty) {
-            cGrid.innerHTML = `<p style="color:var(--txt2); font-family:'Share Tech Mono', monospace; font-size:0.85rem;">[ NO INTEL LOGGED YET. SHARE YOUR BUILD ABOVE ]</p>`;
-            return;
-        }
+        allCommunityData = [];
         snapshot.forEach((doc) => {
-            const data = doc.data();
-            const card = document.createElement('div');
-            card.className = 'c-card';
-            card.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
-                    <div style="font-family:'Orbitron', sans-serif; font-size:1.1rem; color:var(--gold); font-weight:700; word-break:break-word;">${data.weaponName}</div>
-                    <span style="font-size:0.6rem; font-family:'Share Tech Mono', monospace; background:rgba(0,207,255,0.1); color:#00CFFF; padding:2px 6px; border-radius:3px; white-space:nowrap;">${data.gameMode}</span>
-                </div>
-                <div style="font-family:'Share Tech Mono', monospace; font-size:0.75rem; color:var(--txt2); margin-top:2px; margin-bottom:12px;">BY: ${data.playerName}</div>
-                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:3px; display:flex; justify-content:space-between; align-items:center; border:1px dashed rgba(255,255,255,0.05); gap:10px;">
-                    <span style="font-family:'Share Tech Mono', monospace; color:var(--cyan); font-size:0.8rem; word-break:break-all;">${data.loadoutCode}</span>
-                    <button class="cpybtn" style="padding:4px 8px; font-size:0.7rem; min-width:55px;" onclick="navigator.clipboard.writeText('${data.loadoutCode}'); alert('Community Code Copied!')">COPY</button>
-                </div>
-            `;
-            cGrid.appendChild(card);
+            allCommunityData.push({ id: doc.id, ...doc.data() });
         });
+        renderCommunityCards(allCommunityData);
     });
+}
+
+// කාඩ්ස් HTML එකට සජීවීව ඇතුල් කරන ප්‍රධාන ශ්‍රිතය
+window.renderCommunityCards = function(dataArray) {
+    cGrid.innerHTML = '';
+    if (dataArray.length === 0) {
+        cGrid.innerHTML = `<p style="color:var(--txt2); font-family:'Share Tech Mono', monospace; font-size:0.85rem;">[ NO LOGGED INTEL FOUND ]</p>`;
+        return;
+    }
+    
+    dataArray.forEach((data) => {
+        const likes = data.likesCount || 0;
+        const card = document.createElement('div');
+        card.className = 'c-card';
+        
+        // Likes 5කට වඩා තිබේ නම් රන් පාට Border එකක් (Gold Highlight) වැටේ
+        if (likes >= 5) {
+            card.style.borderColor = 'var(--gold)';
+        }
+
+        card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+                <div style="font-family:'Orbitron', sans-serif; font-size:1.1rem; color:var(--gold); font-weight:700; word-break:break-word;">${data.weaponName}</div>
+                <span style="font-size:0.6rem; font-family:'Share Tech Mono', monospace; background:rgba(0,207,255,0.1); color:#00CFFF; padding:2px 6px; border-radius:3px; white-space:nowrap;">${data.gameMode}</span>
+            </div>
+            <div style="font-family:'Share Tech Mono', monospace; font-size:0.75rem; color:var(--txt2); margin-top:2px; margin-bottom:12px;">BY: ${data.playerName}</div>
+            <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:3px; display:flex; justify-content:space-between; align-items:center; border:1px dashed rgba(255,255,255,0.05); gap:10px; margin-bottom:12px;">
+                <span style="font-family:'Share Tech Mono', monospace; color:var(--cyan); font-size:0.8rem; word-break:break-all;">${data.loadoutCode}</span>
+                <button class="cpybtn" style="padding:4px 8px; font-size:0.7rem; min-width:55px;" onclick="navigator.clipboard.writeText('${data.loadoutCode}'); alert('Community Code Copied!')">COPY</button>
+            </div>
+            <!-- 👍 LIKE / RECOMMENDATION CONTROLLER -->
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-family:'Share Tech Mono', monospace; font-size:0.75rem; color:var(--txt2)">👍 ${likes} Recommendations</span>
+                <button class="cpybtn" style="background:rgba(255,255,255,0.05); color:var(--txt); min-width:auto; padding:3px 8px;" onclick="likeLoadout('${data.id}', ${likes})">👍 Like</button>
+            </div>
+        `;
+        cGrid.appendChild(card);
+    });
+}
+
+// Like එකක් දැමූ විට Firestore Update කරන ශ්‍රිතය
+window.likeLoadout = async function(docId, currentLikes) {
+    try {
+        const docRef = doc(db, "community_loadouts", docId);
+        await updateDoc(docRef, {
+            likesCount: currentLikes + 1
+        });
+    } catch (e) {
+        console.error("Error updating likes: ", e);
+    }
+}
+
+// Community සජීවී සෙවුම් පද්ධතිය (Live Search)
+window.searchCommunity = function() {
+    const filter = document.getElementById('comSearch').value.toLowerCase();
+    const filteredData = allCommunityData.filter(item => {
+        return item.weaponName.toLowerCase().includes(filter) || 
+               item.playerName.toLowerCase().includes(filter);
+    });
+    renderCommunityCards(filteredData);
 }
 </script>
 
