@@ -115,7 +115,6 @@ nav{
   margin-top:15px;margin-bottom:10px;opacity:0.8;
 }
 
-/* මෙතන තමයි අකුරු වල වෙනස්කම් ටික ඇඩ් කරලා තියෙන්නේ */
 .h-desc{
   max-width:650px;
   font-family:'Rajdhani', 'Inter', sans-serif;
@@ -195,14 +194,6 @@ nav{
   font-family:'Share Tech Mono',monospace;font-size:0.62rem;
   letter-spacing:0.18em;color:var(--gold);padding:4px 10px;border:1px solid rgba(255,215,0,0.3);text-transform:uppercase;
 }
-.price-notice-sec {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.75rem;
-  color: var(--orange);
- text-align: center;
-  margin-bottom: 20px;
-  letter-spacing: 1px;
-}
 
 /* ── MODE SELECTION TABS ── */
 .mode-menu {
@@ -281,6 +272,22 @@ nav{
 .cpybtn:hover{ background: #3DDBFF; box-shadow: 0 0 8px rgba(0, 207, 255, 0.4); }
 .cpybtn.copied { background: var(--green); color: white; }
 
+/* ── COMMUNITY LOADOUT SHARE & LIVE GRID STYLES ── */
+.com-sec { padding: 60px 48px; max-width: 1300px; margin: 0 auto; border-top: 1px solid var(--gborder); }
+.com-container { display: grid; grid-template-columns: 1fr; gap: 40px; margin-top: 30px; }
+@media(min-width: 950px) { .com-container { grid-template-columns: 380px 1fr; } }
+.com-form-card { background: rgba(11, 16, 24, 0.85); border: 1px dashed rgba(0,207,255,0.3); border-radius: 4px; padding: 25px; height: fit-content; }
+.com-form-title { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--cyan); letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase; border-bottom: 1px solid var(--gborder); padding-bottom: 10px; }
+.com-group { margin-bottom: 18px; }
+.com-label { display: block; font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: var(--txt2); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 1px; }
+.com-input { width: 100%; padding: 10px 14px; background: rgba(6, 9, 12, 0.9); border: 1px solid var(--gborder); color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 600; border-radius: 3px; outline: none; transition: 0.2s; }
+.com-input:focus { border-color: var(--cyan); box-shadow: 0 0 10px rgba(0,207,255,0.15); }
+.com-btn { width: 100%; padding: 12px; background: var(--cyan); color: #030608; border: none; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 3px; transition: 0.2s; clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%); }
+.com-btn:hover { background: #3DDBFF; box-shadow: 0 0 15px rgba(0,207,255,0.3); transform: translateY(-1px); }
+.c-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.c-card { background: rgba(11, 16, 24, 0.5); border: 1px solid var(--gborder); padding: 16px; border-radius: 4px; transition: 0.2s; height: fit-content; position: relative; }
+.c-card:hover { border-color: rgba(0,207,255,0.4); box-shadow: 0 5px 15px rgba(0,207,255,0.08); }
+
 /* ── SOCIAL LINKS ── */
 .social-section { text-align: center; padding: 50px 20px; background: rgba(8,14,20,0.4); border-top: 1px solid var(--gborder); }
 .social-title { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; color: #fff; margin-bottom: 20px; letter-spacing: 1px; }
@@ -315,6 +322,7 @@ footer{
   nav{padding:0 20px;}
   .nlinks{display:none;}
   .sec{padding:40px 20px;}
+  .com-sec{padding: 40px 20px;}
   .wgrid{grid-template-columns:1fr;}
   .h-stats{gap:20px;}
   footer{flex-direction:column; gap:14px; text-align:center; padding:24px 20px;}
@@ -346,8 +354,7 @@ footer{
       <img src="logo1.png" alt="Delta Force Title" class="title-image">
   </div>
   
-  <div class="h-eyebrow fi d2">CLASSIFIED TACTICAL DATABASE</div>
-  <!-- මෙන්න මේ Line එක ලස්සන Glow එකක් එක්ක වෙනස් වුණා -->
+  <div class="h-eyebrow fi d2">CLASSIFIED TACT DATABASE</div>
   <p class="h-desc fi d2">ඔයාට කැමති Weapon Loadout එකක් මෙතනින් ලේසියෙන් Copy කරගන්න.</p>
   <div class="price-notice-hero fi d2">⚠️ Prices are relative to auction rates</div>
   
@@ -412,7 +419,58 @@ footer{
 </div>
 </div>
 
-<section class="social-section" id="community">
+<!-- LIVE COMMUNITY INTEL SECTION -->
+<div id="community" style="background: rgba(6,9,12,0.5);">
+<section class="com-sec">
+  <div class="sec-hdr">
+    <div>
+      <div class="sec-lbl">// GLOBAL LIVE DATASTREAM</div>
+      <h2 class="sec-ttl">COMMUNITY LOADOUTS</h2>
+    </div>
+    <div class="sec-badge" style="color:var(--cyan); border-color:rgba(0,207,255,0.3);">LIVE BROADCAST</div>
+  </div>
+  
+  <div class="com-container">
+    <!-- SUBMIT FORM -->
+    <div class="com-form-card">
+      <div class="com-form-title">// Share Your Build</div>
+      <form id="loadoutForm">
+        <div class="com-group">
+          <label class="com-label">Operator ID</label>
+          <input type="text" id="pName" class="com-input" placeholder="e.g., P R I N C E 么 O P S" required>
+        </div>
+        <div class="com-group">
+          <label class="com-label">Loadout Code (පූර්ණ Game Code එකම පේස්ට් කරන්න)</label>
+          <!-- AUTO EXTRACT කරන්න ලේසි වෙන්න මෙතනට input event එකක් දැම්මා මචං -->
+          <input type="text" id="lCode" class="com-input" placeholder="e.g., K416 Assault Rifle-Warfare-6I5UQBK..." oninput="autoExtractCode(this)" required>
+        </div>
+        <div class="com-group">
+          <label class="com-label">Weapon Name</label>
+          <input type="text" id="wName" class="com-input" placeholder="Auto-fills from code" required>
+        </div>
+        <div class="com-group">
+          <label class="com-label">Game Mode</label>
+          <select id="gMode" class="com-input" style="background:#06090c;" required>
+            <option value="OPERATIONS">OPERATIONS</option>
+            <option value="WARFARE">WARFARE</option>
+          </select>
+        </div>
+        <button type="submit" class="com-btn">Broadcast Loadout</button>
+      </form>
+    </div>
+    
+    <!-- LIVE CARDS GRID -->
+    <div>
+      <div style="font-family:'Share Tech Mono', monospace; font-size:0.75rem; color:var(--txt2); margin-bottom:12px; letter-spacing:1px;">[ RECENT TRANSMISSIONS ]</div>
+      <div class="c-grid" id="communityGrid">
+         <!-- Firebase Live Cards Target -->
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<section class="social-section">
     <h3 class="social-title">// JOIN THE DSM CYBER ZONE COMMUNITY</h3>
     <div class="social-links">
         <a href="https://youtube.com/@dsm_cyberzone?si=iO3iadmzRlE9z6T2" target="_blank" class="btn-social btn-youtube">Subscribe on YouTube</a>
@@ -424,6 +482,119 @@ footer{
   <div class="flogo">DELTA<span>FORCE</span> · HQ</div>
   <div class="fdis">&copy; DSM Cyber Zone. Unofficial fan site developed for Delta Force Community. All weapon names and assets belong to their respective manufacturers.</div>
 </footer>
+
+<!-- AUTO-EXTRACT INTELLIGENCE FUNCTION -->
+<script>
+function autoExtractCode(inputElement) {
+    let fullText = inputElement.value.trim();
+    
+    // ගේම් එකෙන් කොපි කරන "K416 Assault Rifle-Warfare-6I5UQBK094LVQU5F76L11" වගේ ඒවා කඩන්න '-' සලකුණ පාවිච්චි කරනවා.
+    if (fullText.includes('-')) {
+        let parts = fullText.split('-');
+        
+        if (parts.length >= 3) {
+            let extractedWeapon = parts[0].trim();
+            let extractedMode = parts[1].trim().toUpperCase();
+            let extractedCode = parts[2].trim();
+            
+            // Input Boxes වලට ඔටෝ Fill කරනවා
+            document.getElementById('wName').value = extractedWeapon;
+            
+            // Mode එක OPERATIONS ද WARFARE ද කියලා බලලා Select Box එක වෙනස් කරනවා
+            let selectMode = document.getElementById('gMode');
+            if (extractedMode.includes("WARFARE")) {
+                selectMode.value = "WARFARE";
+            } else if (extractedMode.includes("OPERATIONS")) {
+                selectMode.value = "OPERATIONS";
+            }
+            
+            // අන්තිමට, Loadout Code එක තියෙන Box එකට මුළු දිග වැලියු එක වෙනුවට අර අකුරු 21ක ශුද්ධ Code එක විතරක් ඉතුරු කරනවා!
+            inputElement.value = extractedCode;
+        }
+    }
+}
+</script>
+
+<!-- FIREBASE DB CONNECTION -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC4tZLXEXy8Xsj6tNpxkJqMtRGuDTeLe5o",
+  authDomain: "dsm-df-loadout.firebaseapp.com",
+  projectId: "dsm-df-loadout",
+  storageBucket: "dsm-df-loadout.firebasestorage.app",
+  messagingSenderId: "290662987510",
+  appId: "1:290662987510:web:035e851b40c957c3ba9ed7",
+  measurementId: "G-REW0X30P6G"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const form = document.getElementById('loadoutForm');
+if (form) {
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('.com-btn');
+        btn.textContent = "TRANSMITTING...";
+        btn.disabled = true;
+
+        const player = document.getElementById('pName').value;
+        const weapon = document.getElementById('wName').value;
+        const mode = document.getElementById('gMode').value;
+        const code = document.getElementById('lCode').value;
+
+        try {
+            await addDoc(collection(db, "community_loadouts"), {
+                playerName: player,
+                weaponName: weapon,
+                gameMode: mode,
+                loadoutCode: code,
+                timestamp: new Date()
+            });
+            alert("නියමයි! ඔයාගේ Loadout එක සාර්ථකව Live සයිට් එකට එකතු වුණා. 🎯🔥");
+            form.reset();
+        } catch (error) {
+            console.error("Error adding document: ", error);
+            alert("පොඩි අවුලක් වුණා! Firestore Database එක පරීක්ෂා කර බලන්න.");
+        } finally {
+            btn.textContent = "Broadcast Loadout";
+            btn.disabled = false;
+        }
+    });
+}
+
+const cGrid = document.getElementById('communityGrid');
+if (cGrid) {
+    const q = query(collection(db, "community_loadouts"), orderBy("timestamp", "desc"));
+    onSnapshot(q, (snapshot) => {
+        cGrid.innerHTML = '';
+        if (snapshot.empty) {
+            cGrid.innerHTML = `<p style="color:var(--txt2); font-family:'Share Tech Mono', monospace; font-size:0.85rem;">[ NO INTEL LOGGED YET. SHARE YOUR BUILD ABOVE ]</p>`;
+            return;
+        }
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            const card = document.createElement('div');
+            card.className = 'c-card';
+            card.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+                    <div style="font-family:'Orbitron', sans-serif; font-size:1.1rem; color:var(--gold); font-weight:700; word-break:break-word;">${data.weaponName}</div>
+                    <span style="font-size:0.6rem; font-family:'Share Tech Mono', monospace; background:rgba(0,207,255,0.1); color:#00CFFF; padding:2px 6px; border-radius:3px; white-space:nowrap;">${data.gameMode}</span>
+                </div>
+                <div style="font-family:'Share Tech Mono', monospace; font-size:0.75rem; color:var(--txt2); margin-top:2px; margin-bottom:12px;">BY: ${data.playerName}</div>
+                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:3px; display:flex; justify-content:space-between; align-items:center; border:1px dashed rgba(255,255,255,0.05); gap:10px;">
+                    <span style="font-family:'Share Tech Mono', monospace; color:var(--cyan); font-size:0.8rem; word-break:break-all;">${data.loadoutCode}</span>
+                    <button class="cpybtn" style="padding:4px 8px; font-size:0.7rem; min-width:55px;" onclick="navigator.clipboard.writeText('${data.loadoutCode}'); alert('Community Code Copied!')">COPY</button>
+                </div>
+            `;
+            cGrid.appendChild(card);
+        });
+    });
+}
+</script>
 
 <script>
 /* ══════════════ COMPLETE WEAPON DATABASE ══════════════ */
@@ -498,7 +669,7 @@ const weaponDatabase = [
     { mode: "warfare", category: "ar", type: "ASSAULT RIFLE", title: "AKS-74", builds: [{name: "Temporarily Unavailable", code: "6K_WARFARE_TEMP_CODE"}] },
     { mode: "warfare", category: "ar", type: "ASSAULT RIFLE", title: "AK-12", builds: [{name: "Temporarily Unavailable", code: "6K_WARFARE_TEMP_CODE"}] },
     { mode: "warfare", category: "ar", type: "ASSAULT RIFLE", title: "M4A1", builds: [{name: "Temporarily Unavailable", code: "6K_WARFARE_TEMP_CODE"}] },
-    { mode: "warfare", category: "ar", type: "ASSAULT RIFLE", title: "K416", builds: [{name: "Temporarily Unavailable", code: "6K_WARFARE_TEMP_CODE"}] },
+    { mode: "warfare", category: "ar", type: "ASSAULT RIFLE", title: "K416", builds: [{name: "Warfare Main Build", code: "6I5UQBK094LVQU5F76L11"}] },
     { mode: "warfare", category: "ar", type: "ASSAULT RIFLE", title: "CAR-15", builds: [{name: "Temporarily Unavailable", code: "6K_WARFARE_TEMP_CODE"}] },
     { mode: "warfare", category: "ar", type: "ASSAULT RIFLE", title: "M16A4", builds: [{name: "Temporarily Unavailable", code: "6K_WARFARE_TEMP_CODE"}] },
     { mode: "warfare", category: "ar", type: "ASSAULT RIFLE", title: "SG552", builds: [{name: "Temporarily Unavailable", code: "6K_WARFARE_TEMP_CODE"}] },
@@ -603,7 +774,7 @@ function generateWeapons() {
 
 const totalBuilds = generateWeapons();
 
-/* ── MODE FILTER CONTROL (Operations / Warfare) ── */
+/* Mode Filter Control */
 function filterMode(mode, btn) {
     currentMode = mode;
     
@@ -646,7 +817,7 @@ function filterCategory(category, btn) {
     });
 }
 
-/* ── WEAPON SEARCH FUNCTION ── */
+/* Weapon Search Function */
 function searchWeapon() {
     const input = document.getElementById('weaponSearch').value.toUpperCase();
     const cards = document.querySelectorAll('.wcard');
@@ -693,7 +864,7 @@ function cpy(btn, code) {
   });
 }
 
-/* ── LIVE TICKER STRINGS ── */
+/* Live Ticker Strings */
 const tickerItems = [
   'DSM Cyber Zone Loadout Hub', 'Delta Force Global Launch Meta builds',
   'M4A1 Laser Stable Build Active', 'Join Discord for custom request builds',
@@ -703,7 +874,7 @@ const tkr = document.getElementById('tkr');
 const allTracks = [...tickerItems, ...tickerItems];
 tkr.innerHTML = allTracks.map(t => `<span class="ticker-item">${t}</span>`).join('');
 
-/* ── COUNTER ANIMATOR ── */
+/* Counter Animator */
 function animCount(el, target, dur = 1200) {
   let start = null;
   function step(ts) {
@@ -731,7 +902,7 @@ const cio = new IntersectionObserver(entries => {
 }, { threshold: 0.5 });
 cio.observe(document.querySelector('.h-stats'));
 
-/* ══════════════ AMBIENT SMOKE BACKGROUND ENGINE ══════════════ */
+/* Ambient Smoke Background Engine */
 const cv = document.getElementById('smk');
 const cx = cv.getContext('2d');
 function rsz() { cv.width = window.innerWidth; cv.height = window.innerHeight; }
